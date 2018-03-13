@@ -1,0 +1,172 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+
+	 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+     <script src="lib/underscore-min.js"></script>
+{% extends "base.html" %}
+
+{% block content %}
+
+<script type = "text/javascript">
+
+jQuery.ajaxSettings.traditional = true; 
+var skipList = [];
+var curArtistPath = [];
+var curArtist = null;
+
+var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-3675615-11']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type =
+'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' :
+'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0];
+s.parentNode.insertBefore(ga, s);
+  })();
+
+function generatePath() {
+    var source = $("#source").val();
+    var dest = $("#dest").val();
+    if (dest.length === 0) {
+        fetchSims(source);
+    } else {
+        fetchPath(source, dest);
+    }
+}
+
+// function fetchPath(source, dest) {
+// 	console.log('fetch path called!');
+//     ga_track('frog', 'fetchPath',  source + ' ==== ' + dest);
+//     var url = "http://labs2.echonest.com/ArtistGraphServer/find_path";
+//     var url = "http://smarterplaylists.playlistmachinery.com/frog/path";
+//    $("#xbuttons").hide();
+//     info("Creating path between " + source + " and " + dest);
+//     setURL(source, dest, skipList);
+//     $.getJSON(url, {start : source, end : dest, skips:skipList}, function(data) {
+//             var list = $("#list");
+//             list.empty();
+//             if (data.status == 'ok') {
+//                 info("");
+//                 curArtistPath= data.path;
+//                 var msg = 'Found a path from ' + data.path[0].name + ' to ' + data.path[data.path.length -1].name + ' in ' 
+//                     + data.path.length + ' songs. '  
+//                 console.log(msg);
+//                 info(msg);
+//                 showPath(curArtistPath);
+//                 $("#time-info").show();
+//                 $("#path-time").text(Math.round(data.time * 1000));
+//             } else {
+//                 error("Sorry, "  + data.status);
+//                 console.log('errored out');
+//             }
+//         }
+//     );
+// }
+function fetchPath(source, dest) {
+    ga_track('frog', 'fetchPath',  source + ' ==== ' + dest);
+    var url = "http://labs2.echonest.com/ArtistGraphServer/find_path";
+    var url = "http://smarterplaylists.playlistmachinery.com/frog/path";
+
+    $("#xbuttons").hide();
+    info("Creating path between " + source + " and " + dest);
+    console.log("in fetchp")
+    setURL(source, dest, skipList);
+    $.getJSON(url, {src : source, dest : dest, skips:skipList.join(",")}, function(data) {
+            var list = $("#list");
+            list.empty();
+            if (data.status == 'ok' && data.path.length >= 2) {
+                console.log("data ok")
+                info("");
+                curArtistPath = data.path;
+                var msg = 'Found a path from ' + data.path[0].name + ' to ' + data.path[data.path.length -1].name + ' in ' 
+                    + data.path.length + ' tracks. '  
+                info(msg);
+                showPath(curArtistPath);
+                let firstArtist = curArtistPath[0].name;
+                let lastArtist = curArtistPath[curArtistPath.length - 1].name;
+                $("#source").val(firstArtist);
+                $("#dest").val(lastArtist);
+                $("#time-info").show();
+                $("#path-time").text(Math.round(data.pdelta));
+                $("#total-time").text(Math.round(data.fdelta));
+            } else {
+                error("Sorry, "  + data.reason);
+            }
+        }
+    );
+}
+
+function fetchSims(artist) {
+    ga_track('frog', 'fetchSims',  artist);
+    var url = "http://labs2.echonest.com/ArtistGraphServer/similar";
+
+    $("#xbuttons").hide();
+    info("Showing near neighbors for " + artist);
+    setURL(artist, "", []);
+    $.getJSON(url, {artist : artist}, function(data) {
+            var list = $("#list");
+            list.empty();
+            if (data.status == 'ok') {
+                info("");
+                curArtistPath = data.sims;
+                var msg = 'Similar artists to ' + artist;
+                info(msg);
+                showPath(curArtistPath);
+                $("#time-info").show();
+                $("#path-time").text(Math.round(data.time * 1000));
+            } else {
+                error("Sorry, Can't find sims for " + artist);
+                
+            }
+        }
+    );
+}
+function ga_track(page, action, id) {
+    _gaq.push(['_trackEvent', page, action, id]);
+}
+function info(msg) {
+    $("#info").text(msg);
+}
+function setURL(src, dest, skiplist) {
+    var p = '?src=' + src + '&dest=' + dest;
+    if (skipList && skiplist.length > 0) {
+        p += '&skip=' + skiplist.join()
+    }
+    history.replaceState({}, document.title, p);
+}
+function showPath(path) {
+    // minimizeEnergyChange();
+    showPlaylist(path);
+    $("#list").show();
+    $("#xbuttons").show();
+    tweetSetup();
+}
+function error(msg) {
+    $("#info").text(msg);
+}
+
+</script>
+
+
+	<h1>Hello, {{ user.username }}!</h1>
+	<h2> Welcome to the Good Media App </h2>
+		<script>
+		fetchPath('Cream', 'MGMT');
+		</script>
+
+
+
+ <button class="btn btn-info btn-large" id='go' type="button"  onClick='fetchPath("Cream", "MGMT")'>  Boil the frog </button> <!-- loop thru some data field (in this case, posts) 
+		{% for post in posts %}
+        <div><p>{{ post.author.username }} says: <b>{{ post.body }}</b></p></div>
+        {% endfor %}	-->
+{% endblock %}
+</head>
+<body>
+
+</body>
+</html>

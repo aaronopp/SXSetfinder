@@ -1,0 +1,34 @@
+<html>
+	<head>
+		<title> {{title}} - Welcome to the Good Media App </title>
+	</head>
+	<body>
+		<div> Good Media: 
+		<a href="{{ url_for('index') }}">Home</a>
+		<a href="{{ url_for('login') }}">Login</a>
+		<a href="{{ url_for('spotify') }}">Spotify</a>
+		</div> 
+
+		<hr>
+		{% with messages = get_flashed_messages() %}
+		{% if messages %}
+		<ul>
+			{% for message in messages %}
+			<li>{{ message }}</li>
+			{% endfor %}
+
+		</ul>
+		{% endif %}
+		{% endwith %}
+		{% block content %}{% endblock %}
+	</body>
+		
+		<!-- loop thru some data field (in this case, posts) 
+		{% for post in posts %}
+        <div><p>{{ post.author.username }} says: <b>{{ post.body }}</b></p></div>
+        {% endfor %}	-->
+
+
+
+	</body>
+</html>
