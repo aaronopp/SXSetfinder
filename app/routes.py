@@ -9,6 +9,7 @@ import time as time
 
 import webbrowser
 from server import block_until_token
+from utils import *
 
 @app.route('/')
 
@@ -38,7 +39,7 @@ def spotify():
 	if form.validate_on_submit():
 		print 'spotify form went thru'
 
-		scope = 'user-read-playback-state user-read-recently-played'
+		#scope = 'user-read-playback-state user-read-recently-played'
         sp_oauth = spotipy.oauth2.SpotifyOAuth(client_id='dbe2a20785304190b8e35d5d6644397b', 
         	client_secret='d73cf4a1525c44e899feeeff4b840040', redirect_uri='http://localhost:5555/redirect',  scope=scope)
         auth_url = sp_oauth.get_authorize_url()
@@ -57,8 +58,10 @@ def spotify():
             artist_results = sp.current_user_top_artists(time_range='short_term', limit=50)
             for i, item in enumerate(artist_results['items']):
                 print i, item['name']
-            print
+            save_obj(artist_results, 'top_artists')
+
             song_results = sp.current_user_top_tracks(time_range='short_term', limit=50)
+            print type(artist_results)
             for i, item in enumerate(song_results['items']):
                 print i, item['name']
             print
