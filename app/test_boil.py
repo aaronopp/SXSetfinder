@@ -12,7 +12,11 @@ from server import block_until_token
 from utils import *
 
 import urllib, json
+import csv
+import pandas as pd
 
+csv =  pd.read_csv('/Users/aaronopp/Desktop/GOOD_MEDIA/SXSetFinder/artists_3_13.csv') 
+print csv
 url = "http://maps.googleapis.com/maps/api/geocode/json?address=google"
 
 user_artists = {0: 'Kendrick Lamar', 1: 'Kanye West', 2: 'John Mayer', 3: 'The Strokes', 4: 'Tame Impala', 5: 'The Undercover Dream Lovers', 6:'ZHU', 7:'Portugal. The Man', 
@@ -26,11 +30,50 @@ SXSW_artists = ['070 Shake', '16 the Olympus', '1982', '1kPhew', '1Playy' , "20 
 url = "http://smarterplaylists.playlistmachinery.com/frog/path";
 
 start = time.time()
-lowest_path_length = 15
-for artist in SXSW_artists:
-    # print artist
 
-    f = { 'src' : 'Kendrick Lamar', 'dest' : artist}
+lowest_matches_dict = []
+for key, user_artist in user_artists.iteritems():
+    print user_artist
+    lowest_path_length = 15
+    for artist in SXSW_artists:
+        # print artist
+
+        f = { 'src' : user_artist, 'dest' : artist}
+        # f = { 'src' : 'Kendrick Lamar', 'dest' : '1982'}
+        url_encoded = urllib.urlencode(f)
+        full_url = url + '?' + url_encoded
+        # print full_url
+        response = urllib.urlopen(full_url)
+        data = json.loads(response.read())
+        try:
+            raw_path = data['raw_path']
+        except KeyError as error:
+            print 'no match from boilthefrog'
+        #print raw_path
+        #print type(raw_path)
+        path_length = len(raw_path)
+
+        if path_length < lowest_path_length:
+            # print 'lower than max'
+            # print f
+            lowest_match = f
+            # print path_length
+            lowest_path_length = path_length
+
+    print 'the lowest per your spotify top artist'
+    print lowest_path_length
+    print lowest_match
+    lowest_matches_dict.append({"spotify_artist": lowest_match['src'], "SXSW_artist": lowest_match['dest'], "path_length": lowest_path_length})
+
+    print lowest_matches_dict
+#print data
+print 'took' 
+print time.time() - start
+
+
+
+def get_path_length(user_artist, sxsw_artist):
+    f = { 'src' : user_artist, 'dest' : sxsw_artist}
     # f = { 'src' : 'Kendrick Lamar', 'dest' : '1982'}
     url_encoded = urllib.urlencode(f)
     full_url = url + '?' + url_encoded
@@ -40,22 +83,8 @@ for artist in SXSW_artists:
     try:
         raw_path = data['raw_path']
     except KeyError as error:
-    	print 'no match from boilthefrog'
+        print 'no match from boilthefrog'
     #print raw_path
     #print type(raw_path)
     path_length = len(raw_path)
-    if path_length < lowest_path_length:
-    	# print 'lower than max'
-    	# print f
-    	lowest_match = f
-    	# print path_length
-    	lowest_path_length = path_length
-
-print 'the lowest per your spotify top artist'
-print lowest_path_length
-print lowest_match
-lowest_matches_dict = {"spotify_artist": lowest_match['src'], "SXSW_artist": lowest_match['dest'], "path_length": lowest_path_length}
-print lowest_matches_dict
-#print data
-print 'took' 
-print time.time() - start
+    return path_length
