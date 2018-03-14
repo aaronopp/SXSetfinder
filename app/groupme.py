@@ -9,5 +9,5 @@ def makeGroup(n, usrList):
     for i in usrList:
         new_group.memberships.add(i[0], None, i[1], None)
 
-#testList=[['aaron', '8583533185'], ['ranga', '7329978242']]
-#makeGroup('test', testList)
+testList=[['aaron', '8583533185'], ['ranga', '7329978242']]
+makeGroup('test', testList)

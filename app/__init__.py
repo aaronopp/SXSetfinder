@@ -14,6 +14,8 @@ app.config.update(dict(
     SECRET_KEY=os.environ.get('SECRET_KEY') or 'youll-never-get-this',
     WTF_CSRF_SECRET_KEY="a csrf secret key"
 ))
+# app.debug = True
+# app.run(host = '0.0.0.0',port=5005)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
