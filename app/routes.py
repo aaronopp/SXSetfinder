@@ -71,6 +71,21 @@ def spotify():
         #print 'spotify form didnt go thru'
     return render_template('spotify.html', form=form)
 
+@app.route('/groupme', methods=['GET', 'POST'])
+def groupme():
+    from groupy.client import Client
+    import datetime
+
+    def makeGroup(n, usrList):
+        client = Client.from_token('jI9arGAkDrtNWAhKdKLnjaj182R2L7RLV7q9odFj')
+        now=datetime.datetime.now()
+        nDate = n+now.strftime()
+        new_group = client.groups.create(name=nDate)
+        for i in usrList:
+            new_group.memberships.add(i[0], None, i[1], None)
+
+    testList=[['aaron', '8583533185'], ['ranga', '7329978242']]
+    makeGroup('test', testList)
     #token = util.prompt_for_user_token('aaronopp', scope, client_id='dbe2a20785304190b8e35d5d6644397b', client_secret='d73cf4a1525c44e899feeeff4b840040', redirect_uri='http://localhost:5555/redirect')
 # @app.route('/boil', methods['GET', 'POST'])
 # def boil():

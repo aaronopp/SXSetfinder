@@ -22,9 +22,9 @@ print('sp oauth', sp_oauth)
 auth_url = sp_oauth.get_authorize_url()
 
 webbrowser.open(auth_url)
-token = block_until_token(sp_oauth)
+#token = block_until_token(sp_oauth)
 
-#token = util.prompt_for_user_token('aaronopp', scope, client_id='dbe2a20785304190b8e35d5d6644397b', client_secret='d73cf4a1525c44e899feeeff4b840040', redirect_uri='http://localhost:5555/redirect')
+token = util.prompt_for_user_token('aaronopp', scope, client_id='dbe2a20785304190b8e35d5d6644397b', client_secret='d73cf4a1525c44e899feeeff4b840040', redirect_uri='http://localhost:5555/redirect')
 if token:
     sp = spotipy.Spotify(auth=token)
     sp.trace=False
