@@ -15,38 +15,38 @@ from .utils import *
 
 @app.route('/index')
 def index():
-	user = {'username' : 'User'}
-	return render_template('index.html', title='Home', user=user)
+    user = {'username' : 'User'}
+    return render_template('index.html', title='Home', user=user)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-	form = LoginForm()
-	if form.validate_on_submit():
-		print('went thru')
-		flash('Login requested for user {}, remember_me={}'.format(
-			form.firstname.data, form.remember_me.data))
-		return redirect(url_for('index'))
-	else: 
-		print('didnt go thru')
-	return render_template('login.html', title='Sign In', form=form)
+    form = LoginForm()
+    if form.validate_on_submit():
+        print('went thru')
+        flash('Login requested for user {}, remember_me={}'.format(
+            form.firstname.data, form.remember_me.data))
+        return redirect(url_for('index'))
+    else: 
+        print('didnt go thru')
+    return render_template('login.html', title='Sign In', form=form)
 
 
 @app.route('/spotify', methods=['GET', 'POST'])
 def spotify():
-	form = SpotifyForm()
-	scope = 'user-top-read user-read-playback-state user-read-recently-played'
-	print('at spotify')
-	if form.validate_on_submit():
-		print('spotify form went thru')
+    form = SpotifyForm()
+    scope = 'user-top-read user-read-playback-state user-read-recently-played'
+    print('at spotify')
+    if form.validate_on_submit():
+        print('spotify form went thru')
 
-		#scope = 'user-read-playback-state user-read-recently-played'
-		sp_oauth = spotipy.oauth2.SpotifyOAuth(client_id='dbe2a20785304190b8e35d5d6644397b', client_secret='d73cf4a1525c44e899feeeff4b840040', redirect_uri='http://localhost:5555/redirect',  scope=scope)
-		auth_url = sp_oauth.get_authorize_url()
-		
-		webbrowser.open(auth_url)
+        #scope = 'user-read-playback-state user-read-recently-played'
+        sp_oauth = spotipy.oauth2.SpotifyOAuth(client_id='dbe2a20785304190b8e35d5d6644397b', client_secret='d73cf4a1525c44e899feeeff4b840040', redirect_uri='http://localhost:5555/redirect',  scope=scope)
+        auth_url = sp_oauth.get_authorize_url()
+        
+        webbrowser.open(auth_url)
         token = block_until_token(sp_oauth)
 
-		#token = util.prompt_for_user_token('aaronopp', scope, client_id='dbe2a20785304190b8e35d5d6644397b', client_secret='d73cf4a1525c44e899feeeff4b840040', redirect_uri='http://localhost:5555/redirect')
+        #token = util.prompt_for_user_token('aaronopp', scope, client_id='dbe2a20785304190b8e35d5d6644397b', client_secret='d73cf4a1525c44e899feeeff4b840040', redirect_uri='http://localhost:5555/redirect')
         if token:
             sp = spotipy.Spotify(auth=token)
             sp.trace=False
@@ -67,10 +67,10 @@ def spotify():
         else:
             print('cant get token for', form.spotify_username.data)
 
-	#else:
-		#print 'spotify form didnt go thru'
-	return render_template('spotify.html', form=form)
-	#token = util.prompt_for_user_token('aaronopp', scope, client_id='dbe2a20785304190b8e35d5d6644397b', client_secret='d73cf4a1525c44e899feeeff4b840040', redirect_uri='http://localhost:5555/redirect')
+    #else:
+        #print 'spotify form didnt go thru'
+    return render_template('spotify.html', form=form)
+    #token = util.prompt_for_user_token('aaronopp', scope, client_id='dbe2a20785304190b8e35d5d6644397b', client_secret='d73cf4a1525c44e899feeeff4b840040', redirect_uri='http://localhost:5555/redirect')
 # @app.route('/boil', methods['GET', 'POST'])
 # def boil():
     
