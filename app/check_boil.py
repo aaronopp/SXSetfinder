@@ -17,7 +17,7 @@ import pandas as pd
 
 url = "http://smarterplaylists.playlistmachinery.com/frog/path";
 
-raw_csv =  pd.read_csv('/Users/aaronopp/Desktop/GOOD_MEDIA/SXSetFinder/artists_3_13.csv') 
+raw_csv =  pd.read_csv('/Users/aaronopp/Desktop/GOOD_MEDIA/SXSetFinder/app/artist_list_trimmed_final.csv') 
 # raw_csv =  pd.read_csv('/Users/aaronopp/Desktop/GOOD_MEDIA/SXSetFinder/app/events.csv') 
 raw_csv.columns = ['artist']
 print raw_csv

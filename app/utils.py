@@ -38,3 +38,12 @@ def load_obj(name ):
     with open('data/' + name + '.pkl', 'rb+') as f:
         return pickle.load(f)
 
+def find_artist_info(raw_csv, name):
+    info = []
+    for index, row in raw_csv.iterrows():    
+
+        if row['artistname'] == name:
+            print row
+            info.append(row)
+    return info
+       
