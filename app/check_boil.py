@@ -17,12 +17,12 @@ import pandas as pd
 
 url = "http://smarterplaylists.playlistmachinery.com/frog/path";
 
-
 raw_csv =  pd.read_csv('/Users/aaronopp/Desktop/GOOD_MEDIA/SXSetFinder/artists_3_13.csv') 
+# raw_csv =  pd.read_csv('/Users/aaronopp/Desktop/GOOD_MEDIA/SXSetFinder/app/events.csv') 
 raw_csv.columns = ['artist']
 print raw_csv
-artist_list =  raw_csv['artist'].tolist()
-
+# artist_list =  raw_csv['artistname'].tolist()
+artist_list = raw_csv['artist'].tolist()
 artist_list_trimmed = []
 # with open('/Users/aaronopp/Desktop/GOOD_MEDIA/SXSetFinder/artists_3_13.csv', 'rb') as f:
 #     reader = csv.reader(f)
@@ -40,7 +40,7 @@ artist_list_trimmed = []
 	#print value
 # artist_list_trimmed = []
 
-for artist in artist_list:
+for artist in artist_list[:15]:
         # print artist
         print artist
 
@@ -62,3 +62,6 @@ for artist in artist_list:
 
 print 'artist l', len(artist_list)
 print 'artist l trimmed', len(artist_list_trimmed)
+with open('artist_list_trimmed.csv', 'wb') as myfile:
+    wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
+    wr.writerow(mylist)

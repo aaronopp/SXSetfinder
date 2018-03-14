@@ -18,6 +18,7 @@ print 'at spotify'
 #scope = 'user-read-playback-state user-read-recently-played'
 sp_oauth = spotipy.oauth2.SpotifyOAuth(client_id='dbe2a20785304190b8e35d5d6644397b', 
 	client_secret='d73cf4a1525c44e899feeeff4b840040', redirect_uri='http://localhost:5555/redirect',  scope=scope)
+print 'sp oauth', sp_oauth
 auth_url = sp_oauth.get_authorize_url()
 
 webbrowser.open(auth_url)
