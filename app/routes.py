@@ -47,7 +47,7 @@ def spotify():
         
         #webbrowser.open(auth_url)
         #token = block_until_token(sp_oauth)
-        #print('data', form.spotify_username.data)
+        #print('data', form.spotify_uzsername.data)
         token = util.prompt_for_user_token('kushaan', scope, client_id='dbe2a20785304190b8e35d5d6644397b', client_secret='d73cf4a1525c44e899feeeff4b840040', redirect_uri='http://localhost:3000')
         if token:
             top_artists = []

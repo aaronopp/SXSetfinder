@@ -7,7 +7,7 @@ import urllib
 import urllib.parse, urllib.request
 
 import webbrowser
-from .server import block_until_token
+# from .server import block_until_token
 
 import urllib.request, urllib.parse, urllib.error, json
 import csv
@@ -81,3 +81,11 @@ def get_lowest_artist_matches(user_artists_short, artist_list_3_15_f):
     print('took') 
     print(time.time() - start)
     return lowest_matches_dict
+def find_artist_info(raw_csv, name):
+    info = []
+    for index, row in raw_csv.iterrows():    
+
+        if row['artistname'] == name:
+            print (row)
+            info.append(row)
+    return info
