@@ -25,9 +25,9 @@ def block_until_token(sp_oauth):
 	return token_info["access_token"]
 
 def main():
-	print "STARTING"
+	print("STARTING")
 	token = block_until_token(None)
-	print "GOT", token
+	print("GOT", token)
 
 if __name__ == '__main__':
 	main()

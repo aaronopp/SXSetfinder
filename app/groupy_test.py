@@ -8,8 +8,7 @@ import spotipy.util as util
 import time as time
 
 import webbrowser
-from server import block_until_token
-
+from .server import block_until_token
 
 # scope = 'user-top-read user-read-playback-state user-read-recently-played'
 # print 'at spotify'
